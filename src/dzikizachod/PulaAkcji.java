@@ -7,6 +7,7 @@ import java.util.Collections;
  * @author squar
  */
 public class PulaAkcji {
+    private ArrayList<Akcja> oryginalnaPula;
     private ArrayList<Akcja> pulaKarty;
     private ArrayList<Akcja> użyteKarty;
     
@@ -21,6 +22,12 @@ public class PulaAkcji {
             
             liczba--;
         }
+        
+        this.oryginalnaPula = this.pulaKarty;
+    }
+    
+    public void dodajDoUżytych(Akcja akcja) {
+        this.użyteKarty.add(akcja);
     }
     
     public Akcja podajKartę() {
@@ -36,5 +43,10 @@ public class PulaAkcji {
     
     public void przetasujPulę() {
         Collections.shuffle(this.pulaKarty);
+    }
+    
+    public void przywróćPulę() {
+        this.pulaKarty = this.oryginalnaPula;
+        this.użyteKarty.clear();
     }
 }
