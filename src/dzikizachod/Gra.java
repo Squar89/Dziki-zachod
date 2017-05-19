@@ -10,8 +10,8 @@ import java.util.Random;
  */
 public class Gra {
     private static final int LIMIT_TUR = 42;
-    private ArrayList<Gracz> listaŻywychGraczy;
-    private ArrayList<WidokGracza> widokŻywychGraczy;
+    private List<Gracz> listaŻywychGraczy;
+    private List<WidokGracza> widokŻywychGraczy;
     
     public Gra() {};
     
@@ -23,7 +23,7 @@ public class Gra {
         
         indeksDynamitu = -1;
         
-        ArrayList<Gracz> tymczasowaListaGraczy = new ArrayList<>();
+        List<Gracz> tymczasowaListaGraczy = new ArrayList<>();
         
         /* TODO koniecznie wytłumacz co tutaj się dzieje */
         for (Gracz gracz : gracze) {
@@ -33,7 +33,8 @@ public class Gra {
         szeryf = tymczasowaListaGraczy.remove(0);
         Collections.shuffle(tymczasowaListaGraczy);
         tymczasowaListaGraczy.add(0, szeryf);
-            
+        
+        gracze = tymczasowaListaGraczy;
         this.listaŻywychGraczy = tymczasowaListaGraczy;
         
         for (Gracz gracz : gracze) {
