@@ -41,12 +41,25 @@ public abstract class Gracz {
     
     public abstract void dodajSięDoListy(List<Gracz> listaGraczy);
     
-    public void dobierzKarty() {
-        
+    public int ileMaszKart() {
+        return trzymaneKarty.size();
     }
     
-    public void oddajKarty() {
+    public void dodajKartę(Akcja akcja) {
+        trzymaneKarty.add(akcja);
+    }
         
+    public String akcjeToString() {
+        String akcjeString;
+        
+        akcjeString = "    Akcje: [";
+        for (Akcja akcja : trzymaneKarty) {
+            akcjeString += akcja + ", ";
+        }
+        akcjeString = akcjeString.substring(0, akcjeString.length() - 3);
+        akcjeString += "]";
+        
+        return akcjeString;
     }
     
     public int wykonajRuch(Akcja akcja) {
@@ -54,12 +67,6 @@ public abstract class Gracz {
         
         return -2;
     }
-    
-    public String akcjeToString() {
-        return "";
-    }
-    
-    //public abstract String ujawnijTożsamość();
 
     public int getMaksymalnePunktyŻycia() {
         return this.maksymalnePunktyŻycia;
