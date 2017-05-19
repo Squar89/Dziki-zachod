@@ -48,6 +48,10 @@ public abstract class Gracz {
     public void dodajKartę(Akcja akcja) {
         trzymaneKarty.add(akcja);
     }
+    
+    public Akcja oddajKartę() {
+        return trzymaneKarty.remove(0);
+    }
         
     public String akcjeToString() {
         String akcjeString;
@@ -63,7 +67,27 @@ public abstract class Gracz {
     }
     
     public int wykonajRuch(Akcja akcja) {
+        int cel, liczbaKartDanejAkcji = 0;
         
+        for (Akcja karta : trzymaneKarty) {
+            if (karta == akcja) {
+                liczbaKartDanejAkcji++;
+            }
+        }
+        
+        if (liczbaKartDanejAkcji == 0) {
+            cel = -1;
+        }
+        else {
+            cel = strategia.wykonajAkcję(akcja, liczbaKartDanejAkcji);
+            if (cel == 1 && akcja == Akcja.STRZEL) {
+                this.czyStrzelałDoSzeryfa = true;
+            }
+        }
+        
+        if (cel != -1) {
+            trzymaneKarty.remove(akcja);
+        }
         
         return -1;
     }
