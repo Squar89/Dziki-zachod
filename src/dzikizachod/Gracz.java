@@ -36,6 +36,9 @@ public abstract class Gracz {
         this((new Random()).nextInt(2) + MIN_LICZBA_ŻYĆ, strategia);
     }
     
+    @Override
+    public abstract String toString();
+    
     public abstract void dodajSięDoListy(List<Gracz> listaGraczy);
     
     public void dobierzKarty() {
@@ -52,12 +55,7 @@ public abstract class Gracz {
         return -2;
     }
     
-    
-    
-    @Override
-    public abstract String toString();
-    
-    public String turaToString() {
+    public String akcjeToString() {
         return "";
     }
     

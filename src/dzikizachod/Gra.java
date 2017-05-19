@@ -50,11 +50,11 @@ public class Gra {
             
             for (int indeks = 0; indeks < gracze.size(); indeks++) {
                 aktualnyGracz = gracze.get(indeks);
-                opisTury = "GRACZ " + (indeks + 1);
+                opisTury = "GRACZ " + (indeks + 1) + "(" + aktualnyGracz.toString() + "):\n";
                 
                 if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
                     aktualnyGracz.dobierzKarty();
-                    opisTury += aktualnyGracz.turaToString();
+                    opisTury += aktualnyGracz.akcjeToString();
                     
                     if (indeksDynamitu == indeks) {
                         rzutKostką = generator.nextInt(6) + 1;
@@ -139,13 +139,16 @@ public class Gra {
     }
     
     private void wypiszStatusGraczy(List<Gracz> gracze) {
+        Gracz aktualnyGracz;
         String graczString;
         System.out.println("  Gracze:");
         
         for (int indeks = 0; indeks < gracze.size(); indeks++) {
+            aktualnyGracz = gracze.get(indeks);
             System.out.print("    " + (indeks + 1) + ": ");
             
-            graczString = (gracze.get(indeks)).toString();
+            graczString = aktualnyGracz.toString();
+            graczString += "(liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
             System.out.println(graczString);
         }
     }

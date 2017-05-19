@@ -1,6 +1,6 @@
 package dzikizachod;
 
-import java.util.Random;
+import java.util.List;
 
 /**
  *
@@ -14,5 +14,15 @@ public class Bandyta extends Gracz {
     
     public Bandyta(Strategia strategia) {
         super(strategia);
+    }
+    
+    @Override
+    public String toString() {
+        return "Bandyta";
+    }
+    
+    @Override
+    public void dodajSięDoListy(List<Gracz> listaGraczy) {
+        listaGraczy.add(this);
     }
 }

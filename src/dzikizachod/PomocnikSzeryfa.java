@@ -1,5 +1,6 @@
 package dzikizachod;
 
+import java.util.List;
 /**
  *
  * @author squar
@@ -12,5 +13,15 @@ public class PomocnikSzeryfa extends Gracz {
     
     public PomocnikSzeryfa(Strategia strategia) {
         super(strategia);
+    }
+    
+    @Override
+    public String toString() {
+        return "PomocnikSzeryfa";
+    }
+    
+    @Override
+    public void dodajSięDoListy(List<Gracz> listaGraczy) {
+        listaGraczy.add(this);
     }
 }
