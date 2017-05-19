@@ -39,9 +39,12 @@ public class Gra {
         gracze = tymczasowaListaGraczy;
         this.listaŻywychGraczy = tymczasowaListaGraczy;
         
+        this.widokŻywychGraczy = new ArrayList<>();
         for (Gracz gracz : gracze) {
             this.widokŻywychGraczy.add(new WidokGracza(gracz));
         }
+        
+        pulaAkcji.przetasujPulę();
         
         System.out.println("** START");
         wypiszStatusGraczy(gracze);
@@ -52,11 +55,11 @@ public class Gra {
             
             for (int indeks = 0; indeks < gracze.size(); indeks++) {
                 aktualnyGracz = gracze.get(indeks);
-                opisTury = "  GRACZ " + (indeks + 1) + "(" + aktualnyGracz.toString() + "):\n";
+                opisTury = "  GRACZ " + (indeks + 1) + " (" + aktualnyGracz.toString() + "):\n";
                 
                 if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
                     uzupełnijKarty(aktualnyGracz, pulaAkcji);
-                    opisTury += aktualnyGracz.akcjeToString();
+                    opisTury += aktualnyGracz.akcjeToString() + "\n";
                     
                     if (indeksDynamitu == indeks) {
                         rzutKostką = generator.nextInt(6) + 1;
@@ -64,7 +67,7 @@ public class Gra {
                             opisTury += "    Dynamit: WYBUCHł\n";
                             indeksDynamitu = -1;
                             aktualnyGracz.setAktualnePunktyŻycia(
-                                    Math.min(aktualnyGracz.getAktualnePunktyŻycia() - 3, 0));
+                                    Math.max(aktualnyGracz.getAktualnePunktyŻycia() - 3, 0));
                             if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
                                 umiera(aktualnyGracz);
                             }
@@ -73,7 +76,7 @@ public class Gra {
                             opisTury += "    Dynamit: PRZECHODZI DALEJ\n";
                             indeksDynamitu++;
                         }
-                        
+                    }
                         opisTury += "    Ruchy:\n";
                         if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
                             wykonujAkcje(aktualnyGracz, Akcja.ULECZ);
@@ -81,9 +84,8 @@ public class Gra {
                             wykonujAkcje(aktualnyGracz, Akcja.ZASIEG_PLUS_DWA);
                             wykonujAkcje(aktualnyGracz, Akcja.STRZEL);
                             wykonujAkcje(aktualnyGracz, Akcja.DYNAMIT);
+                            opisTury += "\n";
                         }
-                        opisTury += "\n";
-                    }
                 }
                 if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
                     if (indeksDynamitu == indeks) {
@@ -93,6 +95,7 @@ public class Gra {
                 }
                 
                 System.out.println(opisTury);
+                wypiszStatusGraczy(gracze);
             }
             
             numerTury++;
@@ -101,7 +104,9 @@ public class Gra {
     
     private void uzupełnijKarty(Gracz aktualnyGracz, PulaAkcji pulaAkcji) {
         while (aktualnyGracz.ileMaszKart() < LICZBA_KART) {
-            aktualnyGracz.dodajKartę(pulaAkcji.podajKartę());
+            Akcja karta = pulaAkcji.podajKartę();
+            //System.out.println(karta);
+            aktualnyGracz.dodajKartę(karta);
         }
     }
     
@@ -157,7 +162,7 @@ public class Gra {
             System.out.print("    " + (indeks + 1) + ": ");
             
             graczString = aktualnyGracz.toString();
-            graczString += "(liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
+            graczString += " (liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
             System.out.println(graczString);
         }
     }

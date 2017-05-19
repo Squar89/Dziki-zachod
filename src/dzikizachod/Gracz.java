@@ -56,7 +56,7 @@ public abstract class Gracz {
         for (Akcja akcja : trzymaneKarty) {
             akcjeString += akcja + ", ";
         }
-        akcjeString = akcjeString.substring(0, akcjeString.length() - 3);
+        akcjeString = akcjeString.substring(0, akcjeString.length() - 2);
         akcjeString += "]";
         
         return akcjeString;
@@ -65,7 +65,7 @@ public abstract class Gracz {
     public int wykonajRuch(Akcja akcja) {
         
         
-        return -2;
+        return -1;
     }
 
     public int getMaksymalnePunktyŻycia() {

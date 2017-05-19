@@ -16,6 +16,12 @@ public class PulaAkcji {
         this.użyteKarty = new ArrayList<>();
     }
     
+    public void pokaż() {
+        for (Akcja karta : pulaKarty) {
+            System.out.println(karta);
+        }
+    }
+    
     public void dodaj(Akcja akcja, int liczba) {
         while (liczba > 0) {
             this.pulaKarty.add(akcja);
