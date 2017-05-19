@@ -14,6 +14,8 @@ public class Gra {
     
     private List<Gracz> listaŻywychGraczy;
     private List<WidokGracza> widokŻywychGraczy;
+    private List<WidokGracza> widokBandytów;
+    private static List<Gracz> listaBandytów;
     
     public Gra() {};
     
@@ -26,6 +28,7 @@ public class Gra {
         indeksDynamitu = -1;
         
         List<Gracz> tymczasowaListaGraczy = new ArrayList<>();
+        listaBandytów = new ArrayList<>();
         
         /* TODO koniecznie wytłumacz co tutaj się dzieje */
         for (Gracz gracz : gracze) {
@@ -39,10 +42,16 @@ public class Gra {
         gracze = tymczasowaListaGraczy;
         this.listaŻywychGraczy = tymczasowaListaGraczy;
         
+        this.widokBandytów = new ArrayList<>();
         this.widokŻywychGraczy = new ArrayList<>();
         for (Gracz gracz : gracze) {
-            this.widokŻywychGraczy.add(new WidokGracza(gracz));
+            WidokGracza widokGracza = new WidokGracza(gracz);
+            this.widokŻywychGraczy.add(widokGracza);
+            if (listaBandytów.contains(gracz)) {
+                this.widokBandytów.add(widokGracza);
+            }
         }
+        Bandyta.setListaWidokuBandytów(widokBandytów);
         
         pulaAkcji.przetasujPulę();
         
@@ -169,6 +178,10 @@ public class Gra {
     
     private void wypiszTurę(int numerTury) {
         System.out.println("** TURA " + numerTury);
+    }
+    
+    public static void dodajDoListyBandytów(Gracz bandyta) {
+        listaBandytów.add(bandyta);
     }
     
     
