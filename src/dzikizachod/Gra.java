@@ -52,18 +52,19 @@ public class Gra {
                 aktualnyGracz = gracze.get(indeks);
                 opisTury = "GRACZ " + (indeks + 1);
                 
-                if (aktualnyGracz.getPunktyŻycia() > 0) {
-                    aktualnyGracz.przygotujKarty();
-                    opisTury += aktualnyGracz.TuraToString();
+                if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
+                    aktualnyGracz.dobierzKarty();
+                    opisTury += aktualnyGracz.turaToString();
                     
                     if (indeksDynamitu == indeks) {
                         rzutKostką = generator.nextInt(6) + 1;
                         if (rzutKostką == 0) {
                             opisTury += "Dynamit: WYBUCHł\n";
                             indeksDynamitu = -1;
-                            aktualnyGracz.setPunktyŻycia(min(aktualnyGracz.getPunktyŻycia() - 3, 0));
-                            if (aktualnyGracz.getPunktyŻycia() == 0) {
-                                aktualnyGracz.umiera();
+                            aktualnyGracz.setAktualnePunktyŻycia(
+                                    Math.min(aktualnyGracz.getAktualnePunktyŻycia() - 3, 0));
+                            if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
+                                umiera(aktualnyGracz);
                                 opisTury += "Ruchy:\n  MARTWY\n";
                             }
                         }
@@ -72,7 +73,7 @@ public class Gra {
                             indeksDynamitu++;
                         }
                         
-                        if (aktualnyGracz.getPunktyŻycia() > 0) {
+                        if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
                             wykonujAkcje(aktualnyGracz, Akcja.ULECZ);
                             wykonujAkcje(aktualnyGracz, Akcja.ZASIEG_PLUS_JEDEN);
                             wykonujAkcje(aktualnyGracz, Akcja.ZASIEG_PLUS_DWA);
@@ -85,8 +86,10 @@ public class Gra {
                     if (indeksDynamitu == indeks) {
                         indeksDynamitu++;
                     }
-                    opisTury = aktualnyGracz.TuraToString();
+                    opisTury = aktualnyGracz.turaToString();
                 }
+                
+                System.out.println(opisTury);
             }
             
             numerTury++;
@@ -127,7 +130,11 @@ public class Gra {
         //listaŻywychGraczy
     }
     
-    public ArrayList<WidokGracza> getWidokŻywychGraczy() {
+    private void umiera(Gracz gracz) {
+        /* TODO */
+    }
+    
+    public List<WidokGracza> getWidokŻywychGraczy() {
         return this.widokŻywychGraczy;
     }
     

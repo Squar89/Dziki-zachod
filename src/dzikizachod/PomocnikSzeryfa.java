@@ -6,4 +6,11 @@ package dzikizachod;
  */
 public class PomocnikSzeryfa extends Gracz {
     
+    public PomocnikSzeryfa() {
+        super(new StrategiaPomocnikaSzeryfaDomyslna());
+    }
+    
+    public PomocnikSzeryfa(Strategia strategia) {
+        super(strategia);
+    }
 }
