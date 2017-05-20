@@ -12,6 +12,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
     @Override
     public int strzel(Gracz gracz, int liczbaKart) {
         List<WidokGracza> widokGraczy;
+        WidokGracza aktualnyGracz;
         List<Integer> indeksyGraczyWZasięgu, indeksyStrzelaliDoSzeryfa;
         int indeksGracza, pozostałyZasięg, ostatniSprawdzony, cel;
         
@@ -25,7 +26,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         /* Sprawdzamy na lewo od szeryfa który zawsze stoi na pierwszej pozycji, 
          * czyli od końca listy */
         for (int indeks = widokGraczy.size() - 1; indeks > indeksGracza; indeks--) {
-            WidokGracza aktualnyGracz = widokGraczy.get(indeks);
+            aktualnyGracz = widokGraczy.get(indeks);
             ostatniSprawdzony = indeks;
             
             if (aktualnyGracz.zobaczAktualnePunktyŻycia() > 0) {
@@ -43,7 +44,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         
         pozostałyZasięg = gracz.getZasięg();
         for (int indeks = 1; indeks < ostatniSprawdzony; indeks++) {
-            WidokGracza aktualnyGracz = widokGraczy.get(indeks);
+            aktualnyGracz = widokGraczy.get(indeks);
             
             if (aktualnyGracz.zobaczAktualnePunktyŻycia() > 0) {
                 indeksyGraczyWZasięgu.add(indeks);
