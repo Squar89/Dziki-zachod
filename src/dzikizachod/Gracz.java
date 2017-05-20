@@ -17,6 +17,8 @@ public abstract class Gracz {
     private int różnicaZabitychPomocnikówIBandytów;
     private boolean czyStrzelałDoSzeryfa;
     private Strategia strategia;
+    private List<WidokGracza> widokGraczy;
+    private int indeks;
     
     public Gracz() {
         this.trzymaneKarty = new ArrayList<>();
@@ -79,7 +81,7 @@ public abstract class Gracz {
             cel = -1;
         }
         else {
-            cel = strategia.wykonajAkcję(akcja, liczbaKartDanejAkcji);
+            cel = strategia.wybierzCel(this, akcja, liczbaKartDanejAkcji);
             if (cel == 1 && akcja == Akcja.STRZEL) {
                 this.czyStrzelałDoSzeryfa = true;
             }
@@ -89,7 +91,18 @@ public abstract class Gracz {
             trzymaneKarty.remove(akcja);
         }
         
-        return -1;
+        return cel;
+    }
+    
+    public void ustawListęWidokuGraczy(List<WidokGracza> widokGraczy, int indeks) {
+        this.widokGraczy = widokGraczy;
+        this.indeks = indeks;
+    }
+    
+    public void resetujGracza() {
+        this.zasięg = 1;
+        this.różnicaZabitychPomocnikówIBandytów = 0;
+        this.czyStrzelałDoSzeryfa = false;
     }
 
     public int getMaksymalnePunktyŻycia() {
@@ -123,7 +136,12 @@ public abstract class Gracz {
     public boolean getCzyStrzelałDoSzeryfa() {
         return this.czyStrzelałDoSzeryfa;
     }
-    
-    
-    
+
+    public List<WidokGracza> getWidokGraczy() {
+        return widokGraczy;
+    }
+
+    public int getIndeks() {
+        return indeks;
+    }
 }

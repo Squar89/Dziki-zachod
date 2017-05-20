@@ -56,6 +56,10 @@ public class Gra {
         Bandyta.setListaWidokuBandytów(this.widokBandytów);
         this.liczbaBandytów = widokBandytów.size();
         
+        for (int indeks = 0; indeks < this.listaGraczy.size(); indeks++) {
+            this.listaGraczy.get(indeks).ustawListęWidokuGraczy(this.widokGraczy, indeks);
+        }
+        
         this.pulaAkcji = pulaAkcji;
         this.pulaAkcji.przetasujPulę();
         
@@ -93,7 +97,7 @@ public class Gra {
                     }
                         opisTury += "    Ruchy:\n";
                         if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
-                            wykonujAkcje(aktualnyGracz, opisTury);
+                            opisTury += "\n" + wykonujAkcje(aktualnyGracz);
                         }
                 }
                 if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
@@ -129,11 +133,11 @@ public class Gra {
         }
     }
     
-    /* zmien to co przekazujesz na atrybuty obiektu, przekazuj opisTury */
-    private void wykonujAkcje(Gracz aktualnyGracz, String opisTury) {
+    private String wykonujAkcje(Gracz aktualnyGracz) {
         int celIndeks;
         Gracz cel;
         WidokGracza widokCelu;
+        String wykonaneAkcje = "";
         
         for (Akcja akcja : Akcja.values()) {
             celIndeks = aktualnyGracz.wykonajRuch(akcja);
@@ -179,15 +183,15 @@ public class Gra {
                     }
                     case DYNAMIT: {
                         this.indeksDynamitu = celIndeks;
-
-                        this.pulaAkcji.dodajDoUżytych(Akcja.DYNAMIT);
+                        
                         break;
                     }
                 }
-                opisTury += "      " + akcja + celIndeks + "\n";
+                wykonaneAkcje += "      " + akcja + celIndeks + "\n";
                 celIndeks = aktualnyGracz.wykonajRuch(akcja);
             }
         }
+        return wykonaneAkcje;
     }
     
     private void umiera(int indeksGracza) {
@@ -202,10 +206,10 @@ public class Gra {
         }
         
         widokGracza.setTożsamośćGracza(gracz.toString());
-    }
-    
-    public List<WidokGracza> getWidokGraczy() {
-        return this.widokGraczy;
+        
+        if (gracz.toString().equals("Bandyta")) {
+            this.liczbaBandytów--;
+        }
     }
     
     private void wypiszStatusGraczy() {
@@ -229,6 +233,14 @@ public class Gra {
     
     public static void dodajDoListyBandytów(Gracz bandyta) {
         listaBandytów.add(bandyta);
+    }
+        
+    public List<WidokGracza> getWidokGraczy() {
+        return this.widokGraczy;
+    }
+    
+    public int getIndeksGracza(Gracz gracz) {
+        return this.listaGraczy.indexOf(gracz);
     }
     
     public static void main(String[] args) {
