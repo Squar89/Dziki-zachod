@@ -168,6 +168,7 @@ public class Gra {
                         if (cel.getAktualnePunktyŻycia() == 0) {
                             umiera(celIndeks);
                             widokCelu = this.widokGraczy.get(celIndeks);
+                            
                             if (widokCelu.zobaczTożsamośćGracza().equals("PomocnikSzeryfa")) {
                                 aktualnyGracz.setRóżnicaZabitychPomocnikówIBandytów(
                                         aktualnyGracz.getRóżnicaZabitychPomocnikówIBandytów() + 1);
@@ -246,7 +247,7 @@ public class Gra {
     public static void main(String[] args) {
         List<Gracz> gracze = new ArrayList<Gracz>();
         gracze.add(new Szeryf());
-        for (int i=0;i<2;i++) gracze.add(new PomocnikSzeryfa());
+        for (int i=0;i<2;i++) gracze.add(new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaZliczajaca()));
         for (int i=0;i<3;i++) gracze.add(new Bandyta());
         
         PulaAkcji pulaAkcji = new PulaAkcji();

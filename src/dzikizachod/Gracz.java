@@ -82,7 +82,7 @@ public abstract class Gracz {
         }
         else {
             cel = strategia.wybierzCel(this, akcja, liczbaKartDanejAkcji);
-            if (cel == 1 && akcja == Akcja.STRZEL) {
+            if (cel == 0 && akcja == Akcja.STRZEL) {
                 this.czyStrzelałDoSzeryfa = true;
             }
         }
