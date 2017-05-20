@@ -12,6 +12,8 @@ public class Gra {
     private static final int LIMIT_TUR = 42;
     private static final int LICZBA_KART = 5;
     
+    private List<Gracz> listaGraczy;
+    private PulaAkcji pulaAkcji;
     private List<WidokGracza> widokGraczy;
     private List<WidokGracza> widokBandytów;
     private static List<Gracz> listaBandytów;
@@ -23,7 +25,7 @@ public class Gra {
     public void rozgrywka(List<Gracz> gracze, PulaAkcji pulaAkcji) {
         int numerTury, rzutKostką;
         Gracz szeryf, aktualnyGracz;
-        String opisTury;
+        String opisTury, koniecString;
         Random generator = new Random();
         
         this.indeksDynamitu = -1;
@@ -40,11 +42,11 @@ public class Gra {
         Collections.shuffle(tymczasowaListaGraczy);
         tymczasowaListaGraczy.add(0, szeryf);
         
-        gracze = tymczasowaListaGraczy;
+        this.listaGraczy = tymczasowaListaGraczy;
         
         this.widokBandytów = new ArrayList<>();
         this.widokGraczy = new ArrayList<>();
-        for (Gracz gracz : gracze) {
+        for (Gracz gracz : this.listaGraczy) {
             WidokGracza widokGracza = new WidokGracza(gracz);
             this.widokGraczy.add(widokGracza);
             if (listaBandytów.contains(gracz)) {
@@ -54,21 +56,23 @@ public class Gra {
         Bandyta.setListaWidokuBandytów(this.widokBandytów);
         this.liczbaBandytów = widokBandytów.size();
         
-        pulaAkcji.przetasujPulę();
+        this.pulaAkcji = pulaAkcji;
+        this.pulaAkcji.przetasujPulę();
         
         System.out.println("** START");
-        wypiszStatusGraczy(gracze);
+        wypiszStatusGraczy();
+        koniecString = "** KONIEC\n";
         
         numerTury = 1;
         while (numerTury <= LIMIT_TUR) {
             wypiszTurę(numerTury);
             
-            for (int indeks = 0; indeks < gracze.size(); indeks++) {
-                aktualnyGracz = gracze.get(indeks);
+            for (int indeks = 0; indeks < this.listaGraczy.size(); indeks++) {
+                aktualnyGracz = this.listaGraczy.get(indeks);
                 opisTury = "  GRACZ " + (indeks + 1) + " (" + aktualnyGracz.toString() + "):\n";
                 
                 if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
-                    uzupełnijKarty(aktualnyGracz, pulaAkcji);
+                    uzupełnijKarty(aktualnyGracz);
                     opisTury += aktualnyGracz.akcjeToString() + "\n";
                     
                     if (this.indeksDynamitu == indeks) {
@@ -79,7 +83,7 @@ public class Gra {
                             aktualnyGracz.setAktualnePunktyŻycia(
                                     Math.max(aktualnyGracz.getAktualnePunktyŻycia() - 3, 0));
                             if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
-                                umiera(aktualnyGracz, this.widokGraczy.get(indeks), pulaAkcji);
+                                umiera(indeks);//indeks aktualnegoGracza w listach WidokGraczy i ListaGraczy
                             }
                         }
                         else {
@@ -89,8 +93,7 @@ public class Gra {
                     }
                         opisTury += "    Ruchy:\n";
                         if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
-                            wykonujAkcje(gracze, aktualnyGracz, pulaAkcji);
-                            opisTury += "\n";
+                            wykonujAkcje(aktualnyGracz, opisTury);
                         }
                 }
                 if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
@@ -101,25 +104,33 @@ public class Gra {
                 }
                 
                 System.out.println(opisTury);
-                wypiszStatusGraczy(gracze);
+                wypiszStatusGraczy();
             }
             if (liczbaBandytów == 0) {
-                /* Wypisz komunikat o wygranej bandytów */
+                koniecString += "  WYGRANA STRONA: szeryf i pomocnicy";
+                break;
             }
-            /* if Szeryf nie żyje */
+            if (szeryf.getAktualnePunktyŻycia() == 0) {
+                koniecString += "  WYGRANA STRONA: bandyci";
+                break;
+            }
+            if (numerTury == LIMIT_TUR) {
+                koniecString += "  REMIS - OSIĄGNIĘTO LIMIT TUR";
+                break;
+            }
             numerTury++;
         }
-        /* Wypisz komunikat o remisie */
+        System.out.println(koniecString);
     }
     
-    private void uzupełnijKarty(Gracz aktualnyGracz, PulaAkcji pulaAkcji) {
+    private void uzupełnijKarty(Gracz aktualnyGracz) {
         while (aktualnyGracz.ileMaszKart() < LICZBA_KART) {
-            aktualnyGracz.dodajKartę(pulaAkcji.podajKartę());
+            aktualnyGracz.dodajKartę(this.pulaAkcji.podajKartę());
         }
     }
     
     /* zmien to co przekazujesz na atrybuty obiektu, przekazuj opisTury */
-    private void wykonujAkcje(List<Gracz> gracze, Gracz aktualnyGracz, PulaAkcji pulaAkcji) {
+    private void wykonujAkcje(Gracz aktualnyGracz, String opisTury) {
         int celIndeks;
         Gracz cel;
         WidokGracza widokCelu;
@@ -127,32 +138,32 @@ public class Gra {
         for (Akcja akcja : Akcja.values()) {
             celIndeks = aktualnyGracz.wykonajRuch(akcja);
             while (celIndeks != -1) {
-                cel = gracze.get(celIndeks);
+                cel = this.listaGraczy.get(celIndeks);
                 switch (akcja) {
                     case ULECZ: {
                         cel.setAktualnePunktyŻycia(cel.getAktualnePunktyŻycia() + 1);
 
-                        pulaAkcji.dodajDoUżytych(Akcja.ULECZ);
+                        this.pulaAkcji.dodajDoUżytych(Akcja.ULECZ);
                         break;
                     }
                     case ZASIEG_PLUS_JEDEN: {
                         cel.setZasięg(cel.getZasięg() + 1);
 
-                        pulaAkcji.dodajDoUżytych(Akcja.ZASIEG_PLUS_JEDEN);
+                        this.pulaAkcji.dodajDoUżytych(Akcja.ZASIEG_PLUS_JEDEN);
                         break;
                     }
                     case ZASIEG_PLUS_DWA: {
                         cel.setZasięg(cel.getZasięg() + 2);
 
-                        pulaAkcji.dodajDoUżytych(Akcja.ZASIEG_PLUS_DWA);
+                        this.pulaAkcji.dodajDoUżytych(Akcja.ZASIEG_PLUS_DWA);
                         break;
                     }
                     case STRZEL: {
                         cel.setAktualnePunktyŻycia(cel.getAktualnePunktyŻycia() - 1);
 
                         if (cel.getAktualnePunktyŻycia() == 0) {
-                            widokCelu = widokGraczy.get(celIndeks);
-                            umiera(cel, widokCelu, pulaAkcji);
+                            umiera(celIndeks);
+                            widokCelu = this.widokGraczy.get(celIndeks);
                             if (widokCelu.zobaczTożsamośćGracza().equals("PomocnikSzeryfa")) {
                                 aktualnyGracz.setRóżnicaZabitychPomocnikówIBandytów(
                                         aktualnyGracz.getRóżnicaZabitychPomocnikówIBandytów() + 1);
@@ -163,24 +174,31 @@ public class Gra {
                             }
                         }
 
-                        pulaAkcji.dodajDoUżytych(Akcja.STRZEL);
+                        this.pulaAkcji.dodajDoUżytych(Akcja.STRZEL);
                         break;
                     }
                     case DYNAMIT: {
                         this.indeksDynamitu = celIndeks;
 
-                        pulaAkcji.dodajDoUżytych(Akcja.DYNAMIT);
+                        this.pulaAkcji.dodajDoUżytych(Akcja.DYNAMIT);
                         break;
                     }
                 }
+                opisTury += "      " + akcja + celIndeks + "\n";
                 celIndeks = aktualnyGracz.wykonajRuch(akcja);
             }
         }
     }
     
-    private void umiera(Gracz gracz, WidokGracza widokGracza, PulaAkcji pulaAkcji) {
+    private void umiera(int indeksGracza) {
+        Gracz gracz;
+        WidokGracza widokGracza;
+        
+        gracz = this.listaGraczy.get(indeksGracza);
+        widokGracza = this.widokGraczy.get(indeksGracza);
+        
         while (gracz.ileMaszKart() != 0) {
-            pulaAkcji.dodajDoUżytych(gracz.oddajKartę());
+            this.pulaAkcji.dodajDoUżytych(gracz.oddajKartę());
         }
         
         widokGracza.setTożsamośćGracza(gracz.toString());
@@ -190,13 +208,13 @@ public class Gra {
         return this.widokGraczy;
     }
     
-    private void wypiszStatusGraczy(List<Gracz> gracze) {
+    private void wypiszStatusGraczy() {
         Gracz aktualnyGracz;
         String graczString;
         System.out.println("  Gracze:");
         
-        for (int indeks = 0; indeks < gracze.size(); indeks++) {
-            aktualnyGracz = gracze.get(indeks);
+        for (int indeks = 0; indeks < this.listaGraczy.size(); indeks++) {
+            aktualnyGracz = this.listaGraczy.get(indeks);
             System.out.print("    " + (indeks + 1) + ": ");
             
             graczString = aktualnyGracz.toString();
