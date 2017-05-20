@@ -2,7 +2,6 @@ package dzikizachod;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 /**
  *
  * @author squar
@@ -15,12 +14,11 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         List<WidokGracza> widokGraczy;
         List<Integer> indeksyGraczyWZasięgu, indeksyStrzelaliDoSzeryfa;
         int indeksGracza, pozostałyZasięg, ostatniSprawdzony, cel;
-        Random generator = new Random();
         
         widokGraczy = gracz.getWidokGraczy();
         indeksyGraczyWZasięgu = new ArrayList<>();
         indeksyStrzelaliDoSzeryfa = new ArrayList<>();
-        indeksGracza = 1; /* Szeryf zawsze stoi na pierwszej pozycji */
+        indeksGracza = 0; /* Szeryf zawsze stoi na pierwszej pozycji - czyli zerowy indeks*/
         
         ostatniSprawdzony = widokGraczy.size() - 1;
         pozostałyZasięg = gracz.getZasięg();
@@ -44,7 +42,7 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         }
         
         pozostałyZasięg = gracz.getZasięg();
-        for (int indeks = 2; indeks < ostatniSprawdzony; indeks++) {
+        for (int indeks = 1; indeks < ostatniSprawdzony; indeks++) {
             WidokGracza aktualnyGracz = widokGraczy.get(indeks);
             
             if (aktualnyGracz.zobaczAktualnePunktyŻycia() > 0) {
@@ -61,15 +59,15 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         }
         
         if (!indeksyStrzelaliDoSzeryfa.isEmpty()) {
-            cel = losujIndeks(indeksyStrzelaliDoSzeryfa.size());
+            cel = indeksyStrzelaliDoSzeryfa.get(losujIndeks(indeksyStrzelaliDoSzeryfa.size()));
         }
         else if (!indeksyGraczyWZasięgu.isEmpty()) {
-            cel = losujIndeks(indeksyGraczyWZasięgu.size());
+            cel = indeksyGraczyWZasięgu.get(losujIndeks(indeksyGraczyWZasięgu.size()));
         }
         else {
             cel = -1;
         }
-        
+
         return cel;
     }
 }

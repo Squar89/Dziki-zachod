@@ -32,10 +32,16 @@ public abstract class Strategia {
         return gracz.getIndeks();
     }
     
-    public abstract int ulecz(Gracz gracz);
+    public int ulecz(Gracz gracz) {
+        return -1;
+    }
     
-    public abstract int strzel(Gracz gracz, int liczbaKart);
+    public int strzel(Gracz gracz, int liczbaKart) {
+        return -1;
+    }
     
-    public abstract int dynamit(Gracz gracz);
+    public int dynamit(Gracz gracz) {
+        return -1;
+    }
     
 }
