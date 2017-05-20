@@ -33,15 +33,16 @@ public abstract class Strategia {
     }
     
     public int ulecz(Gracz gracz) {
-        return -1;
+        if (gracz.getAktualnePunktyŻycia() < gracz.getMaksymalnePunktyŻycia()) {
+            return gracz.getIndeks();
+        }
+        else {
+            return -1;
+        }
     }
     
-    public int strzel(Gracz gracz, int liczbaKart) {
-        return -1;
-    }
+    public abstract int strzel(Gracz gracz, int liczbaKart);
     
-    public int dynamit(Gracz gracz) {
-        return -1;
-    }
+    public abstract int dynamit(Gracz gracz);
     
 }

@@ -86,8 +86,6 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
         indeksGracza = gracz.getIndeks();
         licznikŻywychGraczy = licznikPodejrzanych = 0;
         
-        /* skoro szeryf jest zawsze pod indeksem rownym 0, to sprawdzamy graczy z przedziału
-         * (indeksGracza, liczbaGraczy) */
         for (int indeks = indeksGracza + 1; indeks < widokGraczy.size(); indeks++) {
             aktualnyGracz = widokGraczy.get(indeks);
             

@@ -93,6 +93,9 @@ public class Gra {
                         else {
                             opisTury += "    Dynamit: PRZECHODZI DALEJ\n";
                             this.indeksDynamitu++;
+                            if (this.indeksDynamitu == this.listaGraczy.size()) {
+                            this.indeksDynamitu = 0;
+                            }
                         }
                     }
                         opisTury += "    Ruchy:\n";
@@ -103,6 +106,9 @@ public class Gra {
                 if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
                     if (this.indeksDynamitu == indeks) {
                         this.indeksDynamitu++;
+                        if (this.indeksDynamitu == this.listaGraczy.size()) {
+                            this.indeksDynamitu = 0;
+                        }
                     }
                     opisTury += "    MARTWY\n";
                 }
@@ -183,7 +189,10 @@ public class Gra {
                         break;
                     }
                     case DYNAMIT: {
-                        this.indeksDynamitu = celIndeks;
+                        this.indeksDynamitu = celIndeks + 1;
+                        if (this.indeksDynamitu == this.listaGraczy.size()) {
+                            this.indeksDynamitu = 0;
+                        }
                         
                         break;
                     }
@@ -247,7 +256,7 @@ public class Gra {
     public static void main(String[] args) {
         List<Gracz> gracze = new ArrayList<Gracz>();
         gracze.add(new Szeryf());
-        for (int i=0;i<2;i++) gracze.add(new PomocnikSzeryfa(new StrategiaPomocnikaSzeryfaZliczajaca()));
+        for (int i=0;i<2;i++) gracze.add(new PomocnikSzeryfa());
         for (int i=0;i<3;i++) gracze.add(new Bandyta());
         
         PulaAkcji pulaAkcji = new PulaAkcji();
