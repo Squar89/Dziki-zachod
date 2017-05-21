@@ -36,4 +36,8 @@ public class WidokGracza {
     public void setTożsamośćGracza(String tożsamość) {
         this.tożsamośćGracza = tożsamość;
     }
+    
+    public boolean zobaczCzyJestBandytą(Gracz graczKtoryPyta) {
+        return gracz.czyJestBandytą(graczKtoryPyta);
+    }
 }

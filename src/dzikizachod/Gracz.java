@@ -104,6 +104,10 @@ public abstract class Gracz {
         this.różnicaZabitychPomocnikówIBandytów = 0;
         this.czyStrzelałDoSzeryfa = false;
     }
+    
+    public boolean czyJestBandytą(Gracz gracz) {
+        return false;
+    }
 
     public int getMaksymalnePunktyŻycia() {
         return this.maksymalnePunktyŻycia;

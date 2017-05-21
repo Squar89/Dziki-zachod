@@ -15,8 +15,6 @@ public class Gra {
     private List<Gracz> listaGraczy;
     private PulaAkcji pulaAkcji;
     private List<WidokGracza> widokGraczy;
-    private List<WidokGracza> widokBandytów;
-    private static List<Gracz> listaBandytów;
     private int indeksDynamitu;
     private int liczbaBandytów;
     
@@ -27,11 +25,11 @@ public class Gra {
         Gracz szeryf, aktualnyGracz;
         String opisTury, koniecString;
         Random generator = new Random();
+        boolean koniec;
         
         this.indeksDynamitu = -1;
         
         List<Gracz> tymczasowaListaGraczy = new ArrayList<>();
-        listaBandytów = new ArrayList<>();
         
         /* TODO koniecznie wytłumacz co tutaj się dzieje */
         for (Gracz gracz : gracze) {
@@ -44,21 +42,17 @@ public class Gra {
         
         this.listaGraczy = tymczasowaListaGraczy;
         
-        this.widokBandytów = new ArrayList<>();
         this.widokGraczy = new ArrayList<>();
         for (Gracz gracz : this.listaGraczy) {
             WidokGracza widokGracza = new WidokGracza(gracz);
             this.widokGraczy.add(widokGracza);
-            if (listaBandytów.contains(gracz)) {
-                this.widokBandytów.add(widokGracza);
-            }
         }
-        Bandyta.setListaWidokuBandytów(this.widokBandytów);
-        this.liczbaBandytów = widokBandytów.size();
         
         for (int indeks = 0; indeks < this.listaGraczy.size(); indeks++) {
             this.listaGraczy.get(indeks).ustawListęWidokuGraczy(this.widokGraczy, indeks);
         }
+        
+        policzBandytów();
         
         this.pulaAkcji = pulaAkcji;
         this.pulaAkcji.przetasujPulę();
@@ -66,6 +60,7 @@ public class Gra {
         System.out.println("** START");
         wypiszStatusGraczy();
         koniecString = "** KONIEC\n";
+        koniec = false;
         
         numerTury = 1;
         while (numerTury <= LIMIT_TUR) {
@@ -98,7 +93,7 @@ public class Gra {
                             }
                         }
                     }
-                        opisTury += "    Ruchy:\n";
+                        opisTury += "    Ruchy:";
                         if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
                             opisTury += "\n" + wykonujAkcje(aktualnyGracz);
                         }
@@ -115,13 +110,19 @@ public class Gra {
                 
                 System.out.println(opisTury);
                 wypiszStatusGraczy();
+                
+                if (liczbaBandytów == 0) {
+                    koniecString += "  WYGRANA STRONA: szeryf i pomocnicy";
+                    koniec = true;
+                    break;
+                }
+                if (szeryf.getAktualnePunktyŻycia() == 0) {
+                    koniecString += "  WYGRANA STRONA: bandyci";
+                    koniec = true;
+                    break;
+                }
             }
-            if (liczbaBandytów == 0) {
-                koniecString += "  WYGRANA STRONA: szeryf i pomocnicy";
-                break;
-            }
-            if (szeryf.getAktualnePunktyŻycia() == 0) {
-                koniecString += "  WYGRANA STRONA: bandyci";
+            if (koniec == true) {
                 break;
             }
             if (numerTury == LIMIT_TUR) {
@@ -235,14 +236,25 @@ public class Gra {
             graczString += " (liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
             System.out.println(graczString);
         }
+        
+        System.out.println("");
     }
     
     private void wypiszTurę(int numerTury) {
         System.out.println("** TURA " + numerTury);
     }
     
-    public static void dodajDoListyBandytów(Gracz bandyta) {
-        listaBandytów.add(bandyta);
+    public void policzBandytów() {
+        Gracz atrapaBandyty;
+        
+        this.liczbaBandytów = 0;
+        atrapaBandyty = new Bandyta();
+        
+        for (Gracz gracz : this.listaGraczy) {
+            if (gracz.czyJestBandytą(atrapaBandyty)) {
+                this.liczbaBandytów++;
+            }
+        }
     }
         
     public List<WidokGracza> getWidokGraczy() {
