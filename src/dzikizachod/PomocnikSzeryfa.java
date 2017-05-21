@@ -19,9 +19,4 @@ public class PomocnikSzeryfa extends Gracz {
     public String toString() {
         return "PomocnikSzeryfa";
     }
-    
-    @Override
-    public void dodajSięDoListy(List<Gracz> listaGraczy) {
-        listaGraczy.add(this);
-    }
 }

@@ -21,11 +21,6 @@ public class Bandyta extends Gracz {
     }
     
     @Override
-    public void dodajSięDoListy(List<Gracz> listaGraczy) {
-        listaGraczy.add(this);
-    }
-    
-    @Override
     public boolean czyJestBandytą(Gracz gracz) {
         return gracz.toString().equals(this.toString());
     }

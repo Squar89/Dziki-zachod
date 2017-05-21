@@ -21,7 +21,7 @@ public class Szeryf extends Gracz {
     }
     
     @Override
-    public void dodajSięDoListy(List<Gracz> listaGraczy) {
-        listaGraczy.add(0, this);
+    public boolean czyJestSzeryfem() {
+        return true;
     }
 }

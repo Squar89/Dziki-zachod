@@ -41,8 +41,6 @@ public abstract class Gracz {
     @Override
     public abstract String toString();
     
-    public abstract void dodajSięDoListy(List<Gracz> listaGraczy);
-    
     public int ileMaszKart() {
         return trzymaneKarty.size();
     }
@@ -106,6 +104,10 @@ public abstract class Gracz {
     }
     
     public boolean czyJestBandytą(Gracz gracz) {
+        return false;
+    }
+    
+    public boolean czyJestSzeryfem() {
         return false;
     }
 

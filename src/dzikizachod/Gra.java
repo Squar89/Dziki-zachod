@@ -21,7 +21,7 @@ public class Gra {
     public Gra() {};
     
     public void rozgrywka(List<Gracz> gracze, PulaAkcji pulaAkcji) {
-        int numerTury, rzutKostką;
+        int numerTury, rzutKostką, początkowyIndeksSzeryfa;
         Gracz szeryf, aktualnyGracz;
         String opisTury, koniecString;
         Random generator = new Random();
@@ -29,18 +29,21 @@ public class Gra {
         
         this.indeksDynamitu = -1;
         
-        List<Gracz> tymczasowaListaGraczy = new ArrayList<>();
-        
-        /* TODO koniecznie wytłumacz co tutaj się dzieje */
-        for (Gracz gracz : gracze) {
-            gracz.dodajSięDoListy(tymczasowaListaGraczy);//szeryf bedzie sie dodawal na pierwszej pozycji, reszta na koniec
+        /* jeśli lista graczy nie będzie zawierała szeryfa to zostanie on dodany */
+        szeryf = new Szeryf();
+        for (int indeks = 0; indeks < gracze.size(); indeks++) {
+            aktualnyGracz = gracze.get(indeks);
+            
+            if (aktualnyGracz.czyJestSzeryfem()) {
+                szeryf = aktualnyGracz;
+                gracze.remove(indeks);
+                break;
+            }
         }
         
-        szeryf = tymczasowaListaGraczy.remove(0);
-        Collections.shuffle(tymczasowaListaGraczy);
-        tymczasowaListaGraczy.add(0, szeryf);
-        
-        this.listaGraczy = tymczasowaListaGraczy;
+        this.listaGraczy = gracze;
+        Collections.shuffle(this.listaGraczy);
+        this.listaGraczy.add(0, szeryf);
         
         this.widokGraczy = new ArrayList<>();
         for (Gracz gracz : this.listaGraczy) {
