@@ -263,8 +263,13 @@ public class Gra {
             aktualnyGracz = this.listaGraczy.get(indeks);
             
             System.out.print("    " + (indeks + 1) + ": ");
-            graczString = aktualnyGracz.toString();
-            graczString += " (liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
+            if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
+                graczString = "X (" + aktualnyGracz.toString() + ")";  
+            }
+            else {
+                graczString = aktualnyGracz.toString();
+                graczString += " (liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
+            }
             
             System.out.println(graczString);
         }
@@ -290,22 +295,4 @@ public class Gra {
             }
         }
     }
-    
-    public static void main(String[] args) {
-        List<Gracz> gracze = new ArrayList<Gracz>();
-        gracze.add(new Szeryf());
-        for (int i=0;i<9;i++) gracze.add(new PomocnikSzeryfa());
-        for (int i=0;i<10;i++) gracze.add(new Bandyta());
-        
-        PulaAkcji pulaAkcji = new PulaAkcji();
-        pulaAkcji.dodaj(Akcja.ULECZ, 20);
-        pulaAkcji.dodaj(Akcja.STRZEL, 60);
-        pulaAkcji.dodaj(Akcja.ZASIEG_PLUS_JEDEN, 3);
-        pulaAkcji.dodaj(Akcja.ZASIEG_PLUS_DWA, 1);
-        pulaAkcji.dodaj(Akcja.DYNAMIT, 1);
-
-        Gra gra = new Gra();
-        gra.rozgrywka(gracze, pulaAkcji);
-    }
-    
 }
