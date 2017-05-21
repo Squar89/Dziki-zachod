@@ -14,12 +14,16 @@ public class StrategiaBandytySprytna extends StrategiaBandyty {
     public int strzel(Gracz gracz, int liczbaKart) {
         List<WidokGracza> widokGraczy;
         WidokGracza aktualnyGracz;
+        /* możliweCele, to wszyscy gracze w zasięgu bandyty nie będący bandytami */
         List<Integer> indeksyMożliweCele;
         int indeksGracza, pozostałyZasięg, cel;
         
         widokGraczy = gracz.getWidokGraczy();
         indeksyMożliweCele = new ArrayList<>();
         indeksGracza = gracz.getIndeks();
+        /* ustawiam tutaj cel na -1 równoważne braku akcji, ponieważ wyjątkowo nie ma tutaj żadnego
+         * losowania (metoda zwróci indeks pierwszego celu jaki znajdzie), więc cel = -1
+         * zostanie zwrócony tylko w przypadku nieznalezienia żadnego możliwego celu */
         cel = -1;
         
         /* Czyli w tej turze zabił już bandytę i dalej będzie działał ze strategią domyślną */
@@ -71,6 +75,8 @@ public class StrategiaBandytySprytna extends StrategiaBandyty {
         }
         else {
             pozostałyZasięg = gracz.getZasięg();
+            /* jeśli szeryf jest w zasięgu bandyty, to automatycznie staje się jego celem
+             * dlatego interesuje nas przedział [0, indeksGracza) */
             for (int indeks = indeksGracza - 1; indeks >= 0; indeks--) {
                 aktualnyGracz = widokGraczy.get(indeks);
 

@@ -19,6 +19,8 @@ public abstract class StrategiaBandyty extends Strategia {
         indeksGracza = gracz.getIndeks();
         licznikŻywychGraczy = 0;
         
+        /* musimy przejść od gracza do szeryfa zgodnie z kierunkiem ruchów graczy,
+         * zatem interesuje nas przedział (indeksGracza, widokGraczy.size()] */
         for (int indeks = indeksGracza + 1; indeks < widokGraczy.size(); indeks++) {
             aktualnyGracz = widokGraczy.get(indeks);
             

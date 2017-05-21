@@ -14,6 +14,7 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
     public int strzel(Gracz gracz, int liczbaKart) {
         List<WidokGracza> widokGraczy;
         WidokGracza aktualnyGracz;
+        /* możliweCele, to wszyscy gracze w zasięgu bandyty nie będący bandytami */
         List<Integer> indeksyMożliweCele;
         int indeksGracza, pozostałyZasięg, cel;
         
@@ -22,6 +23,8 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
         indeksGracza = gracz.getIndeks();
         
         pozostałyZasięg = gracz.getZasięg();
+        /* jeśli szeryf jest w zasięgu bandyty, to automatycznie staje się jego celem
+         * dlatego interesuje nas przedział [0, indeksGracza) */
         for (int indeks = indeksGracza - 1; indeks >= 0; indeks--) {
             aktualnyGracz = widokGraczy.get(indeks);
             
@@ -66,6 +69,8 @@ public class StrategiaBandytyDomyslna extends StrategiaBandyty {
             cel = indeksyMożliweCele.get(losujIndeks(indeksyMożliweCele.size()));
         }
         else {
+            /* jeśli w zasięgu bandyty nie ma żadnego możliwegoCelu, to zwracane jest
+             * -1 równoważne braku akcji ze strony gracza */
             cel = -1;
         }
 

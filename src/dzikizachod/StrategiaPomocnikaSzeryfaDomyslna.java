@@ -21,8 +21,11 @@ public class StrategiaPomocnikaSzeryfaDomyslna extends StrategiaPomocnikaSzeryfa
         indeksyGraczyWZasięgu = new ArrayList<>();
         indeksGracza = gracz.getIndeks();
         
+        /* fory mogą na siebie nachodzić w przypadku bardzo dużego zasięgu lub małej
+         * ilości żywych graczy, dlatego ograniczam je ostatnim indeksem pod którym byłem */
         ostatniSprawdzony = indeksGracza;
         pozostałyZasięg = gracz.getZasięg();
+        /* tym razem interesują nas wszyscy gracze dookoła */
         for (int indeks = indeksGracza - 1; indeks != indeksGracza; indeks--) {
             if (indeks == -1) {
                 indeks = widokGraczy.size() - 1;
@@ -43,10 +46,13 @@ public class StrategiaPomocnikaSzeryfaDomyslna extends StrategiaPomocnikaSzeryfa
         }
         
         pozostałyZasięg = gracz.getZasięg();
+        /* następnyIndeks jest konieczny, bo eliminuje problemy z minięciem ostatniegoSprawdzonego */
         następnyIndeks = indeksGracza + 1;
         if (następnyIndeks == widokGraczy.size()) {
             następnyIndeks = 0;
         }
+        /* interesują nas tylko ci gracze, których jeszcze nie rozpatrzyliśmy w poprzednim
+         * forze, stąd ogarniczenie przez ostatniSprawdzony */
         for (int indeks = następnyIndeks; indeks != ostatniSprawdzony; indeks++) {
             if (indeks == widokGraczy.size()) {
                 indeks = 0;
@@ -69,6 +75,7 @@ public class StrategiaPomocnikaSzeryfaDomyslna extends StrategiaPomocnikaSzeryfa
             cel = indeksyGraczyWZasięgu.get(losujIndeks(indeksyGraczyWZasięgu.size()));
         }
         else {
+            /* jeśli nie ma żadnego możliwego celu ataku, to gracz zwraca -1 równoważne braku akcji */
             cel = -1;
         }
 

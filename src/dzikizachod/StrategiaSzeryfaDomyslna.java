@@ -19,8 +19,11 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         widokGraczy = gracz.getWidokGraczy();
         indeksyGraczyWZasięgu = new ArrayList<>();
         indeksyStrzelaliDoSzeryfa = new ArrayList<>();
-        indeksGracza = 0; /* Szeryf zawsze stoi na pierwszej pozycji - czyli zerowy indeks*/
+        /* Szeryf zawsze stoi na pierwszej pozycji - czyli zerowy indeks*/
+        indeksGracza = 0; 
         
+        /* fory mogą na siebie nachodzić w przypadku bardzo dużego zasięgu lub małej
+         * ilości żywych graczy, dlatego ograniczam je ostatnim indeksem pod którym byłem */
         ostatniSprawdzony = widokGraczy.size() - 1;
         pozostałyZasięg = gracz.getZasięg();
         /* Sprawdzamy na lewo od szeryfa który zawsze stoi na pierwszej pozycji, 
@@ -43,6 +46,8 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
         }
         
         pozostałyZasięg = gracz.getZasięg();
+        /* interesują nas tylko ci gracze, których jeszcze nie rozpatrzyliśmy w poprzednim
+         * forze, stąd ogarniczenie przez ostatniSprawdzony */
         for (int indeks = 1; indeks < ostatniSprawdzony; indeks++) {
             aktualnyGracz = widokGraczy.get(indeks);
             
@@ -59,6 +64,9 @@ public class StrategiaSzeryfaDomyslna extends StrategiaSzeryfa {
             }
         }
         
+        /* jeśli żaden z graczy w zasięgu nie strzelał do szeryfa, to wtedy sprawdzamy
+         * czy jest jakikolwiek możliwy cel, jeśli też nie, to metoda zwraca -1, co jest
+         * równoważne braku akcji ze strony gracza */
         if (!indeksyStrzelaliDoSzeryfa.isEmpty()) {
             cel = indeksyStrzelaliDoSzeryfa.get(losujIndeks(indeksyStrzelaliDoSzeryfa.size()));
         }

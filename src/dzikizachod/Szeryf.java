@@ -1,6 +1,5 @@
 package dzikizachod;
 
-import java.util.List;
 /**
  *
  * @author squar
@@ -20,6 +19,7 @@ public class Szeryf extends Gracz {
         return "Szeryf";
     }
     
+    /* Każdy gracz wie kto jest szeryfem, więc ta metoda może być publiczna */
     @Override
     public boolean czyJestSzeryfem() {
         return true;

@@ -39,28 +39,31 @@ public abstract class Gracz {
         this((new Random()).nextInt(2) + MIN_LICZBA_ŻYĆ, strategia);
     }
     
+    /* gracz przekazuje tu swoją tożsamość
+     * metoda jest publiczna, ale do Gracza ma dostęp jedynie Gra, więc jest to zabezpieczone */
     @Override
     public abstract String toString();
     
     public int ileMaszKart() {
-        return trzymaneKarty.size();
+        return this.trzymaneKarty.size();
     }
     
     public void dodajKartę(Akcja akcja) {
-        trzymaneKarty.add(akcja);
+        this.trzymaneKarty.add(akcja);
     }
     
     public Akcja oddajKartę() {
-        return trzymaneKarty.remove(0);
+        return this.trzymaneKarty.remove(0);
     }
         
     public String akcjeToString() {
         String akcjeString;
         
         akcjeString = "    Akcje: [";
-        for (Akcja akcja : trzymaneKarty) {
+        for (Akcja akcja : this.trzymaneKarty) {
             akcjeString += akcja + ", ";
         }
+        /* usuwa ", " po ostatniej akcji */
         akcjeString = akcjeString.substring(0, akcjeString.length() - 2);
         akcjeString += "]";
         
@@ -70,7 +73,7 @@ public abstract class Gracz {
     public int wykonajRuch(Akcja akcja) {
         int cel, liczbaKartDanejAkcji = 0;
         
-        for (Akcja karta : trzymaneKarty) {
+        for (Akcja karta : this.trzymaneKarty) {
             if (karta == akcja) {
                 liczbaKartDanejAkcji++;
             }
@@ -80,14 +83,15 @@ public abstract class Gracz {
             cel = -1;
         }
         else {
-            cel = strategia.wybierzCel(this, akcja, liczbaKartDanejAkcji);
+            cel = this.strategia.wybierzCel(this, akcja, liczbaKartDanejAkcji);
+            
             if (cel == 0 && akcja == Akcja.STRZEL) {
                 this.czyStrzelałDoSzeryfa = true;
             }
         }
         
         if (cel != -1) {
-            trzymaneKarty.remove(akcja);
+            this.trzymaneKarty.remove(akcja);
         }
         
         return cel;
@@ -145,15 +149,15 @@ public abstract class Gracz {
     }
 
     public List<WidokGracza> getWidokGraczy() {
-        return widokGraczy;
+        return this.widokGraczy;
     }
 
     public int getIndeks() {
-        return indeks;
+        return this.indeks;
     }
 
     public boolean getCzyTejTuryZabiłBandytę() {
-        return czyTejTuryZabiłBandytę;
+        return this.czyTejTuryZabiłBandytę;
     }
 
     public void setCzyTejTuryZabiłBandytę(boolean czyTejTuryZabiłBandytę) {

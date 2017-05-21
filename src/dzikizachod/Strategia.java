@@ -10,9 +10,10 @@ public abstract class Strategia {
     
     public int wybierzCel(Gracz gracz, Akcja akcja, int liczbaKartDanejAkcji) {
         int cel;
+        
         switch (akcja) {
             case ULECZ: cel = ulecz(gracz); break;
-            case ZASIEG_PLUS_JEDEN:
+            case ZASIEG_PLUS_JEDEN: /* klasa Gra zajmie się rozpoznaniem o ile ma zwiekszyc zasieg */
             case ZASIEG_PLUS_DWA: cel = zwiększZasięg(gracz); break;
             case STRZEL: cel = strzel(gracz, liczbaKartDanejAkcji); break;
             case DYNAMIT: cel = dynamit(gracz); break;
@@ -32,6 +33,7 @@ public abstract class Strategia {
         return gracz.getIndeks();
     }
     
+    /* każdy gracz oprócz PomocnikaSzeryfa używa leczenia w ten sam sposób */
     public int ulecz(Gracz gracz) {
         if (gracz.getAktualnePunktyŻycia() < gracz.getMaksymalnePunktyŻycia()) {
             return gracz.getIndeks();

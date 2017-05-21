@@ -8,6 +8,8 @@ public class WidokGracza {
     private final Gracz gracz;
     private String tożsamośćGracza;
     
+    /* Klasa ta służy jako "bufor" do gracza, umozliwia wgląd tylko do niektórych
+     * atrybutów klasy Gracz */
     public WidokGracza(Gracz gracz) {
         this.gracz = gracz;
         this.tożsamośćGracza = "Tożsamość ukryta";

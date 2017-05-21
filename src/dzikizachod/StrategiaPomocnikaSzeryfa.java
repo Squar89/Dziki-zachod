@@ -12,21 +12,20 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
     public int ulecz(Gracz gracz) {
         List<WidokGracza> widokGraczy;
         WidokGracza aktualnyGracz;
-        int indeksGracza, pozostałyZasięg, ostatniSprawdzony, cel, następnyIndeks;
+        int indeksGracza, pozostałyZasięg, cel, następnyIndeks;
         
         widokGraczy = gracz.getWidokGraczy();
         indeksGracza = gracz.getIndeks();
         
-        ostatniSprawdzony = indeksGracza - 1;
         pozostałyZasięg = 1;
         cel = -1;
         
+        /* interesuje nas przedział [0, indeksGracza) ponieważ szukamy szeryfa */
         for (int indeks = indeksGracza - 1; indeks >= 0; indeks--) {
             aktualnyGracz = widokGraczy.get(indeks);
-            ostatniSprawdzony = indeks;
             
             if (aktualnyGracz.zobaczAktualnePunktyŻycia() > 0) {
-                /* Sprawdzamy czy sąsiad jest szeryfem i czy potrzebuje leczenia */
+                /* Sprawdzam czy sąsiad jest szeryfem i czy potrzebuje leczenia */
                 if (indeks == 0
                         && aktualnyGracz.zobaczAktualnePunktyŻycia() < aktualnyGracz.zobaczMaksymalnePunktyŻycia()) {
                     cel = 0;
@@ -40,16 +39,14 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
         }
         
         pozostałyZasięg = 1;
-        następnyIndeks = indeksGracza + 1;
-        if (następnyIndeks == widokGraczy.size()) {
-            następnyIndeks = 0;
-        }
-        for (int indeks = następnyIndeks; indeks != ostatniSprawdzony; indeks++) {
+        for (int indeks = indeksGracza + 1; indeks <= widokGraczy.size(); indeks++) {
+            if (indeks == widokGraczy.size()) {
+                indeks = 0;
+            }
             aktualnyGracz = widokGraczy.get(indeks);
-            ostatniSprawdzony = indeks;
             
             if (aktualnyGracz.zobaczAktualnePunktyŻycia() > 0) {
-                /* Sprawdzamy czy sąsiad jest szeryfem i czy potrzebuje leczenia */
+                /* Sprawdzam czy sąsiad jest szeryfem i czy potrzebuje leczenia */
                 if (indeks == 0
                         && aktualnyGracz.zobaczAktualnePunktyŻycia() < aktualnyGracz.zobaczMaksymalnePunktyŻycia()) {
                     cel = 0;
@@ -60,12 +57,9 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
                     break;
                 }
             }
-            
-            if (indeks == widokGraczy.size() - 1) {
-                indeks = -1; /* więc po operacji indeks++ indeks będzie równy 0 */
-            }
         }
         
+        /* sprawdzam czy jeśli nie mogę uleczyć szeryfa, to czy mogę uleczyć siebie */
         if (cel != 0 && gracz.getAktualnePunktyŻycia() < gracz.getMaksymalnePunktyŻycia()) {
             cel = indeksGracza;
         }
@@ -86,6 +80,8 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
         indeksGracza = gracz.getIndeks();
         licznikŻywychGraczy = licznikPodejrzanych = 0;
         
+        /* musimy przejść od gracza do szeryfa zgodnie z kierunkiem ruchów graczy,
+         * zatem interesuje nas przedział (indeksGracza, widokGraczy.size()] */
         for (int indeks = indeksGracza + 1; indeks < widokGraczy.size(); indeks++) {
             aktualnyGracz = widokGraczy.get(indeks);
             
@@ -104,7 +100,8 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
                 return indeksGracza;
             }
         }
-
+           
+        /* ten kawałek kodu wykona się tylko jeśli nie została podjęta decyzja o wypuszczeniu dynamitu */ 
         return -1;
     }
 }

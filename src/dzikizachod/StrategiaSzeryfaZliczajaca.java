@@ -19,6 +19,8 @@ public class StrategiaSzeryfaZliczajaca extends StrategiaSzeryfa{
         indeksyMożliwychCeli = new ArrayList<>();
         indeksGracza = 0; /* Szeryf zawsze stoi na pierwszej pozycji - czyli zerowy indeks*/
         
+        /* fory mogą na siebie nachodzić w przypadku bardzo dużego zasięgu lub małej
+         * ilości żywych graczy, dlatego ograniczam je ostatnim indeksem pod którym byłem */
         ostatniSprawdzony = widokGraczy.size() - 1;
         pozostałyZasięg = gracz.getZasięg();
         /* Sprawdzamy na lewo od szeryfa który zawsze stoi na pierwszej pozycji, 
@@ -41,6 +43,8 @@ public class StrategiaSzeryfaZliczajaca extends StrategiaSzeryfa{
         }
         
         pozostałyZasięg = gracz.getZasięg();
+        /* interesują nas tylko ci gracze, których jeszcze nie rozpatrzyliśmy w poprzednim
+         * forze, stąd ogarniczenie przez ostatniSprawdzony */
         for (int indeks = 1; indeks < ostatniSprawdzony; indeks++) {
             WidokGracza aktualnyGracz = widokGraczy.get(indeks);
             
@@ -60,6 +64,8 @@ public class StrategiaSzeryfaZliczajaca extends StrategiaSzeryfa{
         if (!indeksyMożliwychCeli.isEmpty()) {
             cel = indeksyMożliwychCeli.get(losujIndeks(indeksyMożliwychCeli.size()));
         }
+        /* jeśli żaden z graczy w zasięgu nie spełnia kryterium strategii, to
+         * metoda zwraca -1 równoważne braku akcji ze strony gracza */
         else {
             cel = -1;
         }

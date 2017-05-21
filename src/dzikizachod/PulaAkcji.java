@@ -16,12 +16,6 @@ public class PulaAkcji {
         this.użyteKarty = new ArrayList<>();
     }
     
-    public void pokaż() {
-        for (Akcja karta : pulaKarty) {
-            System.out.println(karta);
-        }
-    }
-    
     public void dodaj(Akcja akcja, int liczba) {
         while (liczba > 0) {
             this.pulaKarty.add(akcja);
@@ -38,7 +32,7 @@ public class PulaAkcji {
     
     public Akcja podajKartę() {
         if (this.pulaKarty.isEmpty()) {
-            this.pulaKarty = this.użyteKarty;//to mi da referencje na ten Arraylist ktory jest w srodku czy na użyte karty?
+            this.pulaKarty = this.użyteKarty;
             this.użyteKarty = new ArrayList<>();
             
             this.przetasujPulę();

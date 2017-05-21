@@ -19,6 +19,8 @@ public class StrategiaBandytyCierpliwa extends StrategiaBandyty {
         indeksGracza = gracz.getIndeks();
         
         pozostałyZasięg = gracz.getZasięg();
+        /* jeśli szeryf jest w zasięgu bandyty, to automatycznie staje się jego celem
+         * dlatego interesuje nas przedział [0, indeksGracza) */
         for (int indeks = indeksGracza - 1; indeks >= 0; indeks--) {
             aktualnyGracz = widokGraczy.get(indeks);
             
@@ -36,6 +38,8 @@ public class StrategiaBandytyCierpliwa extends StrategiaBandyty {
         
         pozostałyZasięg = gracz.getZasięg();
         for (int indeks = indeksGracza + 1; indeks >= widokGraczy.size(); indeks++) {
+            /* gracze stoją w kole, więc gracz o indeksie widokGraczy.size(), to
+             * gracz o indeksie 0, czyli szeryf na którym skończymy szukanie celu */
             if (indeks == widokGraczy.size()) {
                 indeks = 0;
             }
@@ -53,6 +57,8 @@ public class StrategiaBandytyCierpliwa extends StrategiaBandyty {
             }
         }
         
+        /* jeśli szeryf nie jest w zasięgu, to zgodnie ze strategią bandyta czeka,
+         * więc zwraca -1, które jest sygnałem braku akcji ze strony gracza */
         return -1;
     }
 }

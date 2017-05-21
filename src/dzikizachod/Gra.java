@@ -29,22 +29,27 @@ public class Gra {
         
         this.indeksDynamitu = -1;
         
-        /* jeśli lista graczy nie będzie zawierała szeryfa to zostanie on dodany */
+        /* jeśli podana lista graczy nie będzie zawierała szeryfa to zostanie on dodany */
         szeryf = new Szeryf();
-        for (int indeks = 0; indeks < gracze.size(); indeks++) {
-            aktualnyGracz = gracze.get(indeks);
+        this.listaGraczy = gracze;
+        /* znajduje w liście szeryfa, usuwa go z niej, miesza ją, a następnie dodaje do niej
+         * szeryfa pod zerowym indeksem */
+        for (int indeks = 0; indeks < this.listaGraczy.size(); indeks++) {
+            aktualnyGracz = this.listaGraczy.get(indeks);
             
             if (aktualnyGracz.czyJestSzeryfem()) {
                 szeryf = aktualnyGracz;
-                gracze.remove(indeks);
+                this.listaGraczy.remove(indeks);
                 break;
             }
         }
         
-        this.listaGraczy = gracze;
         Collections.shuffle(this.listaGraczy);
         this.listaGraczy.add(0, szeryf);
         
+        /* tworzy i ustawia widoki każdego gracza - w ten sposób gracz nie będzie mógł
+         * ingerować bezpośrednio w innego gracza, a jedyne będzie miał dostęp do wybranych
+         * informacji o nim */
         this.widokGraczy = new ArrayList<>();
         for (Gracz gracz : this.listaGraczy) {
             WidokGracza widokGracza = new WidokGracza(gracz);
@@ -85,28 +90,23 @@ public class Gra {
                             aktualnyGracz.setAktualnePunktyŻycia(
                                     Math.max(aktualnyGracz.getAktualnePunktyŻycia() - 3, 0));
                             if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
-                                umiera(indeks);//indeks aktualnegoGracza w listach WidokGraczy i ListaGraczy
+                                umiera(indeks);
+                                /* jest to indeks aktualnegoGracza w listach WidokGraczy i ListaGraczy */
                             }
                         }
                         else {
                             opisTury += "    Dynamit: PRZECHODZI DALEJ\n";
-                            this.indeksDynamitu++;
-                            if (this.indeksDynamitu == this.listaGraczy.size()) {
-                            this.indeksDynamitu = 0;
-                            }
+                            przesuńDynamit();
                         }
                     }
-                        opisTury += "    Ruchy:";
-                        if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
-                            opisTury += "\n" + wykonujAkcje(aktualnyGracz);
-                        }
+                    opisTury += "    Ruchy:";
+                    if (aktualnyGracz.getAktualnePunktyŻycia() > 0) {
+                        opisTury += "\n" + wykonujAkcje(aktualnyGracz);
+                    }
                 }
                 if (aktualnyGracz.getAktualnePunktyŻycia() == 0) {
                     if (this.indeksDynamitu == indeks) {
-                        this.indeksDynamitu++;
-                        if (this.indeksDynamitu == this.listaGraczy.size()) {
-                            this.indeksDynamitu = 0;
-                        }
+                        przesuńDynamit();
                     }
                     opisTury += "    MARTWY\n";
                 }
@@ -135,6 +135,12 @@ public class Gra {
             numerTury++;
         }
         System.out.println(koniecString);
+        /* resetuje pewne atrybuty gracza, oraz przywraca pulę, aby można było je ponownie
+         * wykorzystać w kolejnej rozgrywce bez żadnych efektów ubocznych */
+        for (Gracz gracz : gracze) {
+            gracz.resetujGracza();
+        }
+        pulaAkcji.przywróćPulę();
     }
     
     private void uzupełnijKarty(Gracz aktualnyGracz) {
@@ -149,7 +155,11 @@ public class Gra {
         WidokGracza widokCelu;
         String wykonaneAkcje = "";
         
+        /* akcje będą w tej samej kolejności jak w pliku Akcja.java, dlatego są tam
+         * wpisane zgodnie z porządkiem wykonywania akcji przez gracza */
         for (Akcja akcja : Akcja.values()) {
+            /* indeks gracza który został wskazany jako cel pewnej akcji zgodnie ze
+             * strategią aktualnegoGracza */
             celIndeks = aktualnyGracz.wykonajRuch(akcja);
             while (celIndeks != -1) {
                 cel = this.listaGraczy.get(celIndeks);
@@ -210,6 +220,8 @@ public class Gra {
                 celIndeks = aktualnyGracz.wykonajRuch(akcja);
             }
         }
+        /* wychodzimy od tego gracza, więc ta wartość nie będzie nam już potrzebna, 
+         * a ustawiona na true mogłaby zdradzać jego tożsamość */
         aktualnyGracz.setCzyTejTuryZabiłBandytę(false);
         
         return wykonaneAkcje;
@@ -222,6 +234,7 @@ public class Gra {
         gracz = this.listaGraczy.get(indeksGracza);
         widokGracza = this.widokGraczy.get(indeksGracza);
         
+        /* zwracam karty martwego gracza spowrotem do puli */
         while (gracz.ileMaszKart() != 0) {
             this.pulaAkcji.dodaj(gracz.oddajKartę(), 1);
         }
@@ -233,17 +246,26 @@ public class Gra {
         }
     }
     
+    private void przesuńDynamit() {
+        this.indeksDynamitu++;
+        if (this.indeksDynamitu == this.listaGraczy.size()) {
+            this.indeksDynamitu = 0;
+        }
+    }    
+    
     private void wypiszStatusGraczy() {
         Gracz aktualnyGracz;
         String graczString;
+        
         System.out.println("  Gracze:");
         
         for (int indeks = 0; indeks < this.listaGraczy.size(); indeks++) {
             aktualnyGracz = this.listaGraczy.get(indeks);
-            System.out.print("    " + (indeks + 1) + ": ");
             
+            System.out.print("    " + (indeks + 1) + ": ");
             graczString = aktualnyGracz.toString();
             graczString += " (liczba żyć: " + aktualnyGracz.getAktualnePunktyŻycia() + ")";
+            
             System.out.println(graczString);
         }
         
@@ -254,7 +276,9 @@ public class Gra {
         System.out.println("** TURA " + numerTury);
     }
     
-    public void policzBandytów() {
+    private void policzBandytów() {
+        /* tworzymy atrapę, ponieważ bandyta zdradzi swoją tożsamość tylko dla
+         * innego bandyty */
         Gracz atrapaBandyty;
         
         this.liczbaBandytów = 0;
@@ -265,14 +289,6 @@ public class Gra {
                 this.liczbaBandytów++;
             }
         }
-    }
-        
-    public List<WidokGracza> getWidokGraczy() {
-        return this.widokGraczy;
-    }
-    
-    public int getIndeksGracza(Gracz gracz) {
-        return this.listaGraczy.indexOf(gracz);
     }
     
     public static void main(String[] args) {
