@@ -19,6 +19,7 @@ public abstract class Gracz {
     private Strategia strategia;
     private List<WidokGracza> widokGraczy;
     private int indeks;
+    private boolean czyTejTuryZabiłBandytę;
     
     public Gracz() {
         this.trzymaneKarty = new ArrayList<>();
@@ -149,5 +150,13 @@ public abstract class Gracz {
 
     public int getIndeks() {
         return indeks;
+    }
+
+    public boolean getCzyTejTuryZabiłBandytę() {
+        return czyTejTuryZabiłBandytę;
+    }
+
+    public void setCzyTejTuryZabiłBandytę(boolean czyTejTuryZabiłBandytę) {
+        this.czyTejTuryZabiłBandytę = czyTejTuryZabiłBandytę;
     }
 }

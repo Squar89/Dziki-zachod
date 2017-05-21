@@ -97,9 +97,12 @@ public abstract class StrategiaPomocnikaSzeryfa extends Strategia {
             }
         }
         
-        ułamekŻywych = (licznikŻywychGraczy / 3) * 2;
-        if (licznikŻywychGraczy > 3 && licznikPodejrzanych >= ułamekŻywych) {
-            return indeksGracza;
+        if (licznikŻywychGraczy > 0 ) {
+            ułamekŻywych = (licznikŻywychGraczy / 3) * 2;
+         
+            if (licznikŻywychGraczy > 3 && licznikPodejrzanych >= ułamekŻywych) {
+                return indeksGracza;
+            }
         }
 
         return -1;

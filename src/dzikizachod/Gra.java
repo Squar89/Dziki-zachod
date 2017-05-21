@@ -21,7 +21,7 @@ public class Gra {
     public Gra() {};
     
     public void rozgrywka(List<Gracz> gracze, PulaAkcji pulaAkcji) {
-        int numerTury, rzutKostką, początkowyIndeksSzeryfa;
+        int numerTury, rzutKostką;
         Gracz szeryf, aktualnyGracz;
         String opisTury, koniecString;
         Random generator = new Random();
@@ -184,6 +184,7 @@ public class Gra {
                                         aktualnyGracz.getRóżnicaZabitychPomocnikówIBandytów() + 1);
                             }
                             else {
+                                aktualnyGracz.setCzyTejTuryZabiłBandytę(true);
                                 aktualnyGracz.setRóżnicaZabitychPomocnikówIBandytów(
                                         aktualnyGracz.getRóżnicaZabitychPomocnikówIBandytów() - 1);
                             }
@@ -201,10 +202,16 @@ public class Gra {
                         break;
                     }
                 }
-                wykonaneAkcje += "      " + akcja + " " + (celIndeks + 1) + "\n";
+                wykonaneAkcje += "      " + akcja + " ";
+                if (akcja == Akcja.STRZEL || akcja == Akcja.ULECZ) {
+                    wykonaneAkcje += (celIndeks + 1);
+                }
+                wykonaneAkcje += "\n";
                 celIndeks = aktualnyGracz.wykonajRuch(akcja);
             }
         }
+        aktualnyGracz.setCzyTejTuryZabiłBandytę(false);
+        
         return wykonaneAkcje;
     }
     
@@ -216,7 +223,7 @@ public class Gra {
         widokGracza = this.widokGraczy.get(indeksGracza);
         
         while (gracz.ileMaszKart() != 0) {
-            this.pulaAkcji.dodajDoUżytych(gracz.oddajKartę());
+            this.pulaAkcji.dodaj(gracz.oddajKartę(), 1);
         }
         
         widokGracza.setTożsamośćGracza(gracz.toString());
@@ -271,8 +278,8 @@ public class Gra {
     public static void main(String[] args) {
         List<Gracz> gracze = new ArrayList<Gracz>();
         gracze.add(new Szeryf());
-        for (int i=0;i<2;i++) gracze.add(new PomocnikSzeryfa());
-        for (int i=0;i<3;i++) gracze.add(new Bandyta());
+        for (int i=0;i<9;i++) gracze.add(new PomocnikSzeryfa());
+        for (int i=0;i<10;i++) gracze.add(new Bandyta());
         
         PulaAkcji pulaAkcji = new PulaAkcji();
         pulaAkcji.dodaj(Akcja.ULECZ, 20);
